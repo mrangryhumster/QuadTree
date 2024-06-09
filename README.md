@@ -19,8 +19,8 @@ Caveats :
 	//Create tree in coordinates (0,0) - (10,10)
 	QuadTree<int> Tree(0, 0, 10, 10);
 
-    //custom allocator and coordinate type are supported
-    // Example : QuadTree<MyObject,uint16_t,std::allocator<MyObject>>
+    	//custom allocator and coordinate type are supported
+    	// Example : QuadTree<MyObject,uint16_t,std::allocator<MyObject>>
 
 	//Add elements
 	Tree.insert(0, 1, 100);
