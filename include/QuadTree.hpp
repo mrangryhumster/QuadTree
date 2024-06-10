@@ -16,24 +16,28 @@ template<class _T_ValueType,
 
 template<class _T_ValueType, class _T_PositionType, class _T_Allocator>
 class QuadTree <_T_ValueType, _T_PositionType, _T_Allocator, typename std::enable_if<std::is_integral<_T_PositionType>::value>::type> {
+	//Private default constructor for static_assert's
+	QuadTree() {
 
-	static_assert(!std::is_const<_T_ValueType>::value, "_TValueType must not be const-qualified");
-	static_assert(!std::is_reference<_T_ValueType>::value, "_TValueType must not be a reference");
+		static_assert(!std::is_const<_T_ValueType>::value, "_TValueType must not be const-qualified");
+		static_assert(!std::is_reference<_T_ValueType>::value, "_TValueType must not be a reference");
 
-	static_assert(!std::is_const<_T_PositionType>::value, "_TPositionType must not be const-qualified");
-	static_assert(!std::is_reference<_T_PositionType>::value, "_TPositionType must not be a reference");
+		static_assert(!std::is_const<_T_PositionType>::value, "_TPositionType must not be const-qualified");
+		static_assert(!std::is_reference<_T_PositionType>::value, "_TPositionType must not be a reference");
 
-	static_assert(
-		std::is_copy_assignable<_T_ValueType>::value ||
-		std::is_move_assignable<_T_ValueType>::value ||
-		std::is_copy_constructible<_T_ValueType>::value ||
-		std::is_move_constructible<_T_ValueType>::value,
-		"_TValueType : "
-		"not copy_constructible, "
-		"not move_constructible, "
-		"not copy_assignable, "
-		"not move_assignable... "
-		"And how do you think it should work ?");
+		static_assert(
+			std::is_copy_assignable<_T_ValueType>::value ||
+			std::is_move_assignable<_T_ValueType>::value ||
+			std::is_copy_constructible<_T_ValueType>::value ||
+			std::is_move_constructible<_T_ValueType>::value,
+			"_TValueType : "
+			"not copy_constructible, "
+			"not move_constructible, "
+			"not copy_assignable, "
+			"not move_assignable... "
+			"And how do you think it should work ?");
+
+	}
 
 private:
 	struct _TreeNode;
@@ -42,10 +46,16 @@ private:
 
 	typedef char _Td_ChildIdType;
 
-	typedef typename _T_Allocator::template rebind<_LinkNode>::other _Td_LinkAllocType;
-	typedef typename _T_Allocator::template rebind<_ItemNode>::other _Td_ItemAllocType;
-	typedef typename _T_Allocator::template rebind<_Td_ChildIdType>::other _Td_ChildIdTAllocType;
-
+	typedef typename std::allocator_traits<_T_Allocator>::template rebind_alloc<
+		_LinkNode>
+		_Td_LinkAllocType;
+	typedef typename std::allocator_traits<_T_Allocator>::template rebind_alloc<
+		_ItemNode>
+		_Td_ItemAllocType;
+	typedef typename std::allocator_traits<_T_Allocator>::template rebind_alloc<
+		_Td_ChildIdType>
+		_Td_ChildIdTAllocType;
+		
 	using _U_LinkNodeAllocTraits = std::allocator_traits<_Td_LinkAllocType>;
 	using _U_ItemNodeAllocTraits = std::allocator_traits<_Td_ItemAllocType>;
 
